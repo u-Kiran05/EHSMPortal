@@ -20,7 +20,12 @@ sap.ui.define([
 		},
 
 		_loadData: function() {
-			var oModel = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/ZEHSM_RISK_ASMT_V1_CDS/");
+			var oModel = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/ZEHSM_RISK_ASMT_V1_CDS/", {
+				useBatch: false,
+				headers: {
+					"X-Requested-With": "XMLHttpRequest"
+				}
+			});
 			var that = this;
 
 			oModel.read("/ZEHSM_RISK_ASMT_V1", {
@@ -77,13 +82,24 @@ sap.ui.define([
 
 			var oViz = this.byId("barChart");
 			oViz.setDataset(new FlattenedDataset({
-				dimensions: [{ name: "Role", value: "{Role}" }],
-				measures: [{ name: "Count", value: "{Count}" }],
-				data: { path: "/" }
+				dimensions: [{
+					name: "Role",
+					value: "{Role}"
+				}],
+				measures: [{
+					name: "Count",
+					value: "{Count}"
+				}],
+				data: {
+					path: "/"
+				}
 			}));
 			oViz.setModel(new JSONModel(chartData));
 			oViz.setVizProperties({
-				title: { text: "Count by Role", visible: true }
+				title: {
+					text: "Count by Role",
+					visible: true
+				}
 			});
 			oViz.removeAllFeeds();
 			oViz.addFeed(new FeedItem({
@@ -135,7 +151,9 @@ sap.ui.define([
 			var periods = Object.keys(timeMap).sort();
 			var chartData = [];
 			for (var j = 0; j < periods.length; j++) {
-				var row = { Period: periods[j] };
+				var row = {
+					Period: periods[j]
+				};
 				var regs = timeMap[periods[j]];
 				for (var regKey in regs) {
 					row[regKey] = regs[regKey];
@@ -151,15 +169,23 @@ sap.ui.define([
 				var sample = chartData[0];
 				for (var key in sample) {
 					if (key !== "Period") {
-						measures.push({ name: key, value: "{" + key + "}" });
+						measures.push({
+							name: key,
+							value: "{" + key + "}"
+						});
 					}
 				}
 			}
 
 			oViz.setDataset(new FlattenedDataset({
-				dimensions: [{ name: "Period", value: "{Period}" }],
+				dimensions: [{
+					name: "Period",
+					value: "{Period}"
+				}],
 				measures: measures,
-				data: { path: "/" }
+				data: {
+					path: "/"
+				}
 			}));
 			oViz.setModel(new JSONModel(chartData));
 			oViz.setVizProperties({
@@ -168,11 +194,15 @@ sap.ui.define([
 					visible: true
 				},
 				plotArea: {
-					dataLabel: { visible: false }
+					dataLabel: {
+						visible: false
+					}
 				},
 				legend: {
 					isScrollable: true,
-					layout: { position: "bottom" }
+					layout: {
+						position: "bottom"
+					}
 				}
 			});
 			oViz.removeAllFeeds();
