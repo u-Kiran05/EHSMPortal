@@ -83,7 +83,9 @@
 				"sap.ushell": {},
 				"sap.collaboration": {},
 				"sap.ui.comp": {},
-				"sap.uxap": {}
+				"sap.uxap": {},
+				"sap.suite.ui.commons": {}
+
 			}
 		},
 		"routing": {
@@ -112,6 +114,10 @@
 				"name": "Dashboard2",
 				"target": "Dashboard2"
 			}, {
+				"pattern": "view2",
+				"name": "View2",
+				"target": "View2"
+			}, {
 				"pattern": "Dashboard3",
 				"name": "Dashboard3",
 				"target": "Dashboard3"
@@ -120,6 +126,11 @@
 				"View1": {
 					"viewId": "View1",
 					"viewName": "View1",
+					"transition": "slide"
+				},
+				"View2": {
+					"viewId": "View2",
+					"viewName": "View2",
 					"transition": "slide"
 				},
 				"Dashboard1": {

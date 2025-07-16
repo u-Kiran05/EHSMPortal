@@ -8,20 +8,26 @@ sap.ui.define([
 	return Controller.extend("QualityPortal.controller.View1", {
 		onLoginPress: function() {
 			var oView = this.getView();
-			var sUser = oView.byId("username").getValue().trim();
-			var sPass = oView.byId("password").getValue().trim();
+			var oUserInput = oView.byId("username");
+			var oPassInput = oView.byId("password");
 			var oMsgStrip = oView.byId("msgStrip");
-			var oStatusText = oView.byId("statusText");
 
-			// Reset previous messages
-			oMsgStrip.setVisible(false);
-			oStatusText.setText("");
+			// Check if msgStrip exists
+			if (!oMsgStrip) {
+				jQuery.sap.log.warning("msgStrip not found in the view.");
+				return;
+			}
 
-			// Validate inputs
+			oMsgStrip.setVisible(false); // Hide previous messages
+
+			// Check if inputs exist before calling getValue
+			var sUser = oUserInput ? oUserInput.getValue().trim() : "";
+			var sPass = oPassInput ? oPassInput.getValue().trim() : "";
+
 			if (!sUser || !sPass) {
-				oMsgStrip.setVisible(true);
 				oMsgStrip.setText("Please enter both username and password.");
 				oMsgStrip.setType("Warning");
+				oMsgStrip.setVisible(true);
 				return;
 			}
 
@@ -40,7 +46,7 @@ sap.ui.define([
 						oMsgStrip.setType("Success");
 
 						var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
-						oRouter.navTo("Dashboard1");
+						oRouter.navTo("View2");
 					} else {
 						oMsgStrip.setVisible(true);
 						oMsgStrip.setText("Invalid username or password.");

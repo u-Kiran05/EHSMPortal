@@ -3,25 +3,45 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	"sap/viz/ui5/data/FlattenedDataset",
 	"sap/viz/ui5/controls/common/feeds/FeedItem",
-	"sap/m/MessageToast"
-], function(Controller, JSONModel, FlattenedDataset, FeedItem, MessageToast) {
+	"sap/viz/ui5/controls/Popover",
+	"sap/viz/ui5/controls/VizTooltip",
+	"sap/m/MessageToast",
+	"sap/m/MessageBox"
+], function(
+	Controller,
+	JSONModel,
+	FlattenedDataset,
+	FeedItem,
+	Popover,
+	VizTooltip,
+	MessageToast, MessageBox
+) {
 	"use strict";
 
 	return Controller.extend("QualityPortal.controller.Dashboard2", {
 		onInit: function() {
-			this.lotModel = new JSONModel({ results: [] });
+			this.lotModel = new JSONModel();
 			this.getView().setModel(this.lotModel, "lot");
 			this.loadIncidentData();
 		},
 
+		onNavigateToView2: function() {
+			sap.ui.core.UIComponent.getRouterFor(this).navTo("View2");
+		},
+
 		onLogout: function() {
-			sap.ui.core.UIComponent.getRouterFor(this).navTo("View1");
+			sap.m.MessageBox.confirm("Are you sure you want to logout?", {
+				title: "Confirm Logout",
+				icon: sap.m.MessageBox.Icon.QUESTION,
+				actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+				emphasizedAction: sap.m.MessageBox.Action.YES,
+				onClose: function(oAction) {
+					if (oAction === sap.m.MessageBox.Action.YES) {
+						sap.ui.core.UIComponent.getRouterFor(this).navTo("View1");
+					}
+				}.bind(this)
+			});
 		},
-
-		onNavigateToDashboard1: function() {
-			sap.ui.core.UIComponent.getRouterFor(this).navTo("Dashboard1");
-		},
-
 		loadIncidentData: function() {
 			var that = this;
 			var oModel = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/ZEHSM_INC_MGMT_V1_CDS/");
@@ -37,21 +57,33 @@ sap.ui.define([
 		},
 
 		_processData: function(results) {
-			var newCount = 0, reviewed = 0, voided = 0;
+			var newCount = 0,
+				reviewed = 0,
+				voided = 0;
 
 			for (var i = 0; i < results.length; i++) {
 				var item = results[i];
 				if (item.IncidentStatus === "NEW") newCount++;
 				else if (item.IncidentStatus === "REVIEW COMPLETE" || item.IncidentStatus === "CLOSED") reviewed++;
 				else if (item.IncidentStatus === "VOID") voided++;
-				item.CreatedOn = item.CreatedOn instanceof Date ? item.CreatedOn : new Date(item.CreatedOn);
+				item.CreatedOn = new Date(item.CreatedOn);
 			}
 
-			this.getView().getModel("lot").setData({ results: results });
-			this.byId("kpiTotalIncidents").setNumber(results.length);
-			this.byId("kpiNew").setNumber(newCount);
-			this.byId("kpiReviewed").setNumber(reviewed);
-			this.byId("kpiVoided").setNumber(voided);
+			var pageSize = 10;
+			var currentPage = 1;
+			var totalPages = Math.ceil(results.length / pageSize);
+
+			this.lotModel.setData({
+				total: results.length,
+				new: newCount,
+				reviewed: reviewed,
+				voided: voided,
+				results: results,
+				currentPage: currentPage,
+				pageSize: pageSize,
+				totalPages: totalPages,
+				pagedResults: results.slice(0, pageSize)
+			});
 
 			this._buildCharts(results);
 		},
@@ -60,87 +92,194 @@ sap.ui.define([
 			this._buildDonut(this.byId("chart1"), data, "IncidentStatus", "Incident Status Distribution");
 			this._buildBar(this.byId("chart2"), data, "IncidentGroup", "Incidents by Group");
 			this._buildLine(this.byId("chart3"), data, "CreatedOn", "Monthly Incident Trend");
-			this._buildBar(this.byId("chart4"), data, "Location", "Incidents by Location");
 		},
 
 		_buildDonut: function(oViz, data, groupField, title) {
 			var map = {};
-			for (var i = 0; i < data.length; i++) {
-				var d = data[i];
+			data.forEach(function(d) {
 				var key = d[groupField] || "Unknown";
 				map[key] = (map[key] || 0) + 1;
-			}
-			var chartData = [];
-			for (var label in map) {
-				chartData.push({ label: label, value: map[label] });
-			}
+			});
+
+			var chartData = Object.keys(map).map(function(label) {
+				return {
+					label: label,
+					value: map[label]
+				};
+			});
 
 			oViz.setVizType("donut");
 			oViz.setDataset(new FlattenedDataset({
-				dimensions: [{ name: "Status", value: "{label}" }],
-				measures: [{ name: "Count", value: "{value}" }],
-				data: { path: "/" }
+				dimensions: [{
+					name: "Status",
+					value: "{label}"
+				}],
+				measures: [{
+					name: "Count",
+					value: "{value}"
+				}],
+				data: {
+					path: "/"
+				}
 			}));
 			oViz.setModel(new JSONModel(chartData));
-			oViz.setVizProperties({ title: { text: title, visible: true } });
+			oViz.setVizProperties({
+				title: {
+					text: title,
+					visible: true
+				}
+			});
 			oViz.removeAllFeeds();
-			oViz.addFeed(new FeedItem({ uid: "size", type: "Measure", values: ["Count"] }));
-			oViz.addFeed(new FeedItem({ uid: "color", type: "Dimension", values: ["Status"] }));
+			oViz.addFeed(new FeedItem({
+				uid: "size",
+				type: "Measure",
+				values: ["Count"]
+			}));
+			oViz.addFeed(new FeedItem({
+				uid: "color",
+				type: "Dimension",
+				values: ["Status"]
+			}));
+
+			new Popover().connect(oViz.getVizUid());
+			new VizTooltip().connect(oViz.getVizUid());
 		},
 
 		_buildBar: function(oViz, data, groupField, title) {
 			var map = {};
-			for (var i = 0; i < data.length; i++) {
-				var d = data[i];
+			data.forEach(function(d) {
 				var key = d[groupField] || "Unknown";
 				map[key] = (map[key] || 0) + 1;
-			}
-			var chartData = [];
-			for (var key in map) {
-				chartData.push({ Category: key, Count: map[key] });
-			}
+			});
+
+			var chartData = Object.keys(map).map(function(key) {
+				return {
+					Category: key,
+					Count: map[key]
+				};
+			});
 
 			oViz.setVizType("column");
 			oViz.setDataset(new FlattenedDataset({
-				dimensions: [{ name: "Category", value: "{Category}" }],
-				measures: [{ name: "Count", value: "{Count}" }],
-				data: { path: "/" }
+				dimensions: [{
+					name: "Category",
+					value: "{Category}"
+				}],
+				measures: [{
+					name: "Count",
+					value: "{Count}"
+				}],
+				data: {
+					path: "/"
+				}
 			}));
 			oViz.setModel(new JSONModel(chartData));
-			oViz.setVizProperties({ title: { text: title, visible: true } });
+			oViz.setVizProperties({
+				title: {
+					text: title,
+					visible: true
+				}
+			});
 			oViz.removeAllFeeds();
-			oViz.addFeed(new FeedItem({ uid: "valueAxis", type: "Measure", values: ["Count"] }));
-			oViz.addFeed(new FeedItem({ uid: "categoryAxis", type: "Dimension", values: ["Category"] }));
+			oViz.addFeed(new FeedItem({
+				uid: "valueAxis",
+				type: "Measure",
+				values: ["Count"]
+			}));
+			oViz.addFeed(new FeedItem({
+				uid: "categoryAxis",
+				type: "Dimension",
+				values: ["Category"]
+			}));
+
+			new Popover().connect(oViz.getVizUid());
+			new VizTooltip().connect(oViz.getVizUid());
 		},
 
 		_buildLine: function(oViz, data, dateField, title) {
 			var map = {};
-			for (var i = 0; i < data.length; i++) {
-				var d = new Date(data[i][dateField]);
-				if (!isNaN(d)) {
-					var key = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2);
+			data.forEach(function(d) {
+				var date = new Date(d[dateField]);
+				if (!isNaN(date)) {
+					var key = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2);
 					map[key] = (map[key] || 0) + 1;
 				}
-			}
-			var chartData = [];
-			for (var k in map) {
-				chartData.push({ Period: k, Count: map[k] });
-			}
-			chartData.sort(function(a, b) {
-				return a.Period > b.Period ? 1 : -1;
+			});
+
+			var chartData = Object.keys(map).sort().map(function(key) {
+				return {
+					Period: key,
+					Count: map[key]
+				};
 			});
 
 			oViz.setVizType("line");
 			oViz.setDataset(new FlattenedDataset({
-				dimensions: [{ name: "Period", value: "{Period}" }],
-				measures: [{ name: "Count", value: "{Count}" }],
-				data: { path: "/" }
+				dimensions: [{
+					name: "Period",
+					value: "{Period}"
+				}],
+				measures: [{
+					name: "Count",
+					value: "{Count}"
+				}],
+				data: {
+					path: "/"
+				}
 			}));
 			oViz.setModel(new JSONModel(chartData));
-			oViz.setVizProperties({ title: { text: title, visible: true } });
+			oViz.setVizProperties({
+				title: {
+					text: title,
+					visible: true
+				}
+			});
 			oViz.removeAllFeeds();
-			oViz.addFeed(new FeedItem({ uid: "valueAxis", type: "Measure", values: ["Count"] }));
-			oViz.addFeed(new FeedItem({ uid: "categoryAxis", type: "Dimension", values: ["Period"] }));
+			oViz.addFeed(new FeedItem({
+				uid: "valueAxis",
+				type: "Measure",
+				values: ["Count"]
+			}));
+			oViz.addFeed(new FeedItem({
+				uid: "categoryAxis",
+				type: "Dimension",
+				values: ["Period"]
+			}));
+
+			new Popover().connect(oViz.getVizUid());
+			new VizTooltip().connect(oViz.getVizUid());
+		},
+
+		onNextPage: function() {
+			var model = this.getView().getModel("lot");
+			var page = model.getProperty("/currentPage");
+			var total = model.getProperty("/totalPages");
+
+			if (page < total) {
+				model.setProperty("/currentPage", page + 1);
+				this._updatePagedResults();
+			}
+		},
+
+		onPrevPage: function() {
+			var model = this.getView().getModel("lot");
+			var page = model.getProperty("/currentPage");
+
+			if (page > 1) {
+				model.setProperty("/currentPage", page - 1);
+				this._updatePagedResults();
+			}
+		},
+
+		_updatePagedResults: function() {
+			var model = this.getView().getModel("lot");
+			var all = model.getProperty("/results");
+			var page = model.getProperty("/currentPage");
+			var size = model.getProperty("/pageSize");
+
+			var start = (page - 1) * size;
+			var end = start + size;
+			model.setProperty("/pagedResults", all.slice(start, end));
 		}
 	});
 });

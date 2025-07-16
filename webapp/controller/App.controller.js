@@ -1,11 +1,11 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
-], function (Controller) {
-    "use strict";
+	"sap/ui/core/mvc/Controller"
+], function(Controller) {
+	"use strict";
 
-    return Controller.extend("QualityPortal.controller.App", {
-        onInit: function () {
+	return Controller.extend("QualityPortal.controller.App", {
+		onInit: function() {
 
-        }
-    });
+		}
+	});
 });
