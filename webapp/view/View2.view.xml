@@ -4,7 +4,7 @@
 			<customHeader>
 			<Bar>
 				<contentMiddle>
-					<Title text="EHSM Portal - Choose Dashboardl"/>
+					<Title text="EHSM Portal - Choose Dashboard"/>
 				</contentMiddle>
 				<contentRight>
 					<Button icon="sap-icon://log" text="Logout" press="onLogout"/>
