@@ -7,7 +7,7 @@
 					<Button icon="sap-icon://nav-back" text="Back" press="onNavigateToView2"/>
 				</contentLeft>
 				<contentMiddle>
-					<Title text="Incident Dashboard - EHSM Portal"/>
+					<Title text="Incidents Dashboard"/>
 				</contentMiddle>
 				<contentRight>
 					<Button icon="sap-icon://log" text="Logout" press="onLogout"/>
@@ -38,18 +38,8 @@
 					<ObjectNumber number="{lot>/voided}" unit="Voided" state="Error"/>
 				</VBox>
 			</layout:Grid>
-			<!-- Chart Container -->
-			<suite:ChartContainer id="chartContainer" showZoom="true" autoAdjustHeight="true" class="sapUiMediumMarginTop">
+			<suite:ChartContainer id="chartContainer" title="Incidents Details" showZoom="true" autoAdjustHeight="true" class="sapUiMediumMarginTop">
 				<suite:content>
-					<suite:ChartContainerContent icon="sap-icon://donut-chart" title="Incident Status">
-						<suite:content><viz:VizFrame id="chart1" width="100%" height="400px"/></suite:content>
-					</suite:ChartContainerContent>
-					<suite:ChartContainerContent icon="sap-icon://bar-chart" title="Group Distribution">
-						<suite:content><viz:VizFrame id="chart2" width="100%" height="400px"/></suite:content>
-					</suite:ChartContainerContent>
-					<suite:ChartContainerContent icon="sap-icon://line-chart" title="Monthly Trend">
-						<suite:content><viz:VizFrame id="chart3" width="100%" height="400px"/></suite:content>
-					</suite:ChartContainerContent>
 					<suite:ChartContainerContent icon="sap-icon://table-view" title="Incident Table">
 						<suite:content>
 							<VBox>
@@ -84,6 +74,16 @@
 								</Table>
 							</VBox>
 						</suite:content>
+					</suite:ChartContainerContent>
+					<!-- Charts below -->
+					<suite:ChartContainerContent icon="sap-icon://donut-chart" title="Incident Status">
+						<suite:content><viz:VizFrame id="chart1" width="100%" height="400px"/></suite:content>
+					</suite:ChartContainerContent>
+					<suite:ChartContainerContent icon="sap-icon://bar-chart" title="Group Distribution">
+						<suite:content><viz:VizFrame id="chart2" width="100%" height="400px"/></suite:content>
+					</suite:ChartContainerContent>
+					<suite:ChartContainerContent icon="sap-icon://line-chart" title="Monthly Trend">
+						<suite:content><viz:VizFrame id="chart3" width="100%" height="400px"/></suite:content>
 					</suite:ChartContainerContent>
 				</suite:content>
 			</suite:ChartContainer>
