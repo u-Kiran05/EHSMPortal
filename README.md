@@ -28,7 +28,7 @@ Use the following credentials to explore the demo version of the portal:
 
 ## 📱 Quick Access via QR Code
 
-Scan the QR code below to launch the EHSM Portal on your mobile device:
+Scan the QR code below to launch the EHSM Portal on your mobile/Tablet device:
 
 <p align="center">
   <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://8b47c4b1trial.launchpad.cfapps.us10.hana.ondemand.com/67ccb5fd-37e1-430b-8271-334e12d40592.EHSMPortal.EHSMPortal-1.0.0" alt="EHSM Portal QR Code">
