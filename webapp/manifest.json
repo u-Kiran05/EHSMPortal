@@ -1,172 +1,187 @@
 {
-    "_version": "1.7.0",
-    "sap.app": {
-        "id": "EHSMPortal",
-        "type": "application",
-        "i18n": "i18n/i18n.properties",
-        "applicationVersion": {
-            "version": "1.0.0"
-        },
-        "title": "{{appTitle}}",
-        "description": "{{appDescription}}",
-        "sourceTemplate": {
-            "id": "servicecatalog.connectivityComponent",
-            "version": "0.0.0",
-            "toolsId": "3a724ad1-bcc6-4df8-a96f-56d68df12f2b"
-        },
-        "dataSources": {
-            "ZEHSM_RISK_ASMT_V1_CDS": {
-                "uri": "/sap/opu/odata/sap/ZEHSM_RISK_ASMT_V1_CDS/",
-                "type": "OData",
-                "settings": {
-                    "odataVersion": "2.0",
-                    "localUri": "localService/ZEHSM_RISK_ASMT_V1_CDS/metadata.xml"
-                }
-            },
-            "ZEHSM_INC_MGMT_V1_CDS": {
-                "uri": "/sap/opu/odata/sap/ZEHSM_INC_MGMT_V1_CDS/",
-                "type": "OData",
-                "settings": {
-                    "odataVersion": "2.0",
-                    "localUri": "localService/ZEHSM_INC_MGMT_V1_CDS/metadata.xml"
-                }
-            }
-        }
+  "_version": "1.7.0",
+  "sap.app": {
+    "id": "EHSMPortal",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "1.0.0"
     },
-    "sap.ui": {
-        "technology": "UI5",
-        "icons": {
-            "icon": "",
-            "favIcon": "",
-            "phone": "",
-            "phone@2": "",
-            "tablet": "",
-            "tablet@2": ""
-        },
-        "deviceTypes": {
-            "desktop": true,
-            "tablet": true,
-            "phone": true
-        },
-        "supportedThemes": [
-            "sap_hcb",
-            "sap_belize"
-        ]
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "sourceTemplate": {
+      "id": "servicecatalog.connectivityComponent",
+      "version": "0.0.0",
+      "toolsId": "3a724ad1-bcc6-4df8-a96f-56d68df12f2b"
     },
-    "sap.ui5": {
-        "rootView": {
-            "viewName": "EHSMPortal.view.App",
-            "type": "XML",
-            "id": "app"
-        },
-        "dependencies": {
-            "minUI5Version": "1.30.0",
-            "libs": {
-                "sap.ui.core": {},
-                "sap.m": {},
-                "sap.ui.layout": {},
-                "sap.ushell": {},
-                "sap.collaboration": {},
-                "sap.ui.comp": {},
-                "sap.uxap": {},
-                "sap.suite.ui.commons": {}
-            }
-        },
-        "models": {
-            "i18n": {
-                "type": "sap.ui.model.resource.ResourceModel",
-                "settings": {
-                    "bundleName": "EHSMPortal.i18n.i18n"
-                }
-            },
-            "ZEHSM_RISK_ASMT_V1_CDS": {
-                "dataSource": "ZEHSM_RISK_ASMT_V1_CDS"
-            },
-            "ZEHSM_INC_MGMT_V1_CDS": {
-                "dataSource": "ZEHSM_INC_MGMT_V1_CDS"
-            }
-        },
-        "routing": {
-            "config": {
-                "routerClass": "sap.m.routing.Router",
-                "viewType": "XML",
-                "viewPath": "EHSMPortal.view",
-                "controlId": "app",
-                "controlAggregation": "pages",
-                "transition": "fade",
-                "bypassed": {
-                    "target": "View1"
-                },
-                "async": true
-            },
-            "routes": [
-                {
-                    "pattern": "",
-                    "name": "View1",
-                    "target": "View1"
-                },
-                {
-                    "pattern": "dashboard",
-                    "name": "Dashboard1",
-                    "target": "Dashboard1"
-                },
-                {
-                    "pattern": "dashboard2",
-                    "name": "Dashboard2",
-                    "target": "Dashboard2"
-                },
-                {
-                    "pattern": "view2",
-                    "name": "View2",
-                    "target": "View2"
-                },
-                {
-                    "pattern": "Dashboard3",
-                    "name": "Dashboard3",
-                    "target": "Dashboard3"
-                }
-            ],
-            "targets": {
-                "View1": {
-                    "viewId": "View1",
-                    "viewName": "View1",
-                    "transition": "slide"
-                },
-                "View2": {
-                    "viewId": "View2",
-                    "viewName": "View2",
-                    "transition": "slide"
-                },
-                "Dashboard1": {
-                    "viewName": "Dashboard1",
-                    "viewId": "Dashboard1",
-                    "transition": "slide"
-                },
-                "Dashboard2": {
-                    "viewName": "Dashboard2",
-                    "viewId": "Dashboard2",
-                    "transition": "slide"
-                },
-                "Dashboard3": {
-                    "viewName": "Dashboard3",
-                    "viewType": "XML",
-                    "viewId": "Dashboard3",
-                    "controlAggregation": "pages",
-                    "controlId": "app",
-                    "transition": "slide"
-                }
-            }
-        },
-        "contentDensities": {
-            "compact": true,
-            "cozy": true
-        },
-        "resources": {
-            "css": [
-                {
-                    "uri": "css/style.css"
-                }
-            ]
+    "dataSources": {
+      "ZEHSM_RISK_ASMT_V1_CDS": {
+        "uri": "/sap/opu/odata/sap/ZEHSM_RISK_ASMT_V1_CDS/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0",
+          "localUri": "localService/ZEHSM_RISK_ASMT_V1_CDS/metadata.xml"
         }
+      },
+      "ZPP_QLOGIN_V_CDS": {
+        "uri": "/sap/opu/odata/sap/ZPP_QLOGIN_V_CDS/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0",
+          "localUri": "localService/ZPP_QLOGIN_V_CDS/metadata.xml"
+        }
+      },
+      "ZEHSM_INC_MGMT_V1_CDS": {
+        "uri": "/sap/opu/odata/sap/ZEHSM_INC_MGMT_V1_CDS/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0",
+          "localUri": "localService/ZEHSM_INC_MGMT_V1_CDS/metadata.xml"
+        }
+      }
     }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    },
+    "supportedThemes": [
+      "sap_hcb",
+      "sap_belize"
+    ]
+  },
+  "sap.ui5": {
+    "rootView": {
+      "viewName": "EHSMPortal.view.App",
+      "type": "XML",
+      "id": "app"
+    },
+    "dependencies": {
+      "minUI5Version": "1.30.0",
+      "libs": {
+        "sap.ui.core": {},
+        "sap.m": {},
+        "sap.ui.layout": {},
+        "sap.ushell": {},
+        "sap.collaboration": {},
+        "sap.ui.comp": {},
+        "sap.uxap": {},
+        "sap.suite.ui.commons": {}
+      }
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "EHSMPortal.i18n.i18n"
+        }
+      },
+      "ZEHSM_RISK_ASMT_V1_CDS": {
+        "dataSource": "ZEHSM_RISK_ASMT_V1_CDS"
+      },
+      "ZEHSM_INC_MGMT_V1_CDS": {
+        "dataSource": "ZEHSM_INC_MGMT_V1_CDS"
+      },
+      "ZPP_QLOGIN_V_CDS": {
+        "dataSource": "ZPP_QLOGIN_V_CDS"
+      }
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "EHSMPortal.view",
+        "controlId": "app",
+        "controlAggregation": "pages",
+        "transition": "fade",
+        "bypassed": {
+          "target": "View1"
+        },
+        "async": true
+      },
+      "routes": [
+        {
+          "pattern": "",
+          "name": "View1",
+          "target": "View1"
+        },
+        {
+          "pattern": "dashboard",
+          "name": "Dashboard1",
+          "target": "Dashboard1"
+        },
+        {
+          "pattern": "dashboard2",
+          "name": "Dashboard2",
+          "target": "Dashboard2"
+        },
+        {
+          "pattern": "view2",
+          "name": "View2",
+          "target": "View2"
+        },
+        {
+          "pattern": "Dashboard3",
+          "name": "Dashboard3",
+          "target": "Dashboard3"
+        }
+      ],
+      "targets": {
+        "View1": {
+          "viewId": "View1",
+          "viewName": "View1",
+          "transition": "slide"
+        },
+        "View2": {
+          "viewId": "View2",
+          "viewName": "View2",
+          "transition": "slide"
+        },
+        "Dashboard1": {
+          "viewName": "Dashboard1",
+          "viewId": "Dashboard1",
+          "transition": "slide"
+        },
+        "Dashboard2": {
+          "viewName": "Dashboard2",
+          "viewId": "Dashboard2",
+          "transition": "slide"
+        },
+        "Dashboard3": {
+          "viewName": "Dashboard3",
+          "viewType": "XML",
+          "viewId": "Dashboard3",
+          "controlAggregation": "pages",
+          "controlId": "app",
+          "transition": "slide"
+        }
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "EHSMPortal"
+  }
 }

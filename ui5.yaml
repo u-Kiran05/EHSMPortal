@@ -7,7 +7,7 @@ server:
     - name: fiori-tools-proxy
       afterMiddleware: compression
       configuration:
-        ignoreCertError: false
+        ignoreCertError: true
         backend:
           - path: /sap
             url: http://azktlds5cp.kcloud.com:8000

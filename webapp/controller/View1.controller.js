@@ -12,15 +12,12 @@ sap.ui.define([
 			var oPassInput = oView.byId("password");
 			var oMsgStrip = oView.byId("msgStrip");
 
-			// Check if msgStrip exists
 			if (!oMsgStrip) {
 				jQuery.sap.log.warning("msgStrip not found in the view.");
 				return;
 			}
+			oMsgStrip.setVisible(false);
 
-			oMsgStrip.setVisible(false); // Hide previous messages
-
-			// Check if inputs exist before calling getValue
 			var sUser = oUserInput ? oUserInput.getValue().trim() : "";
 			var sPass = oPassInput ? oPassInput.getValue().trim() : "";
 
@@ -31,36 +28,33 @@ sap.ui.define([
 				return;
 			}
 
-			// Call OData service
-			var oModel = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/ZPP_QLOGIN_V_CDS/");
+			// Use named model declared in manifest.json
+			var oModel = this.getOwnerComponent().getModel("ZPP_QLOGIN_V_CDS");
 			var sPath = "/ZPP_QLOGIN_V(p_bname='" + sUser + "',p_pass='" + encodeURIComponent(sPass) + "')/Set";
-
 			var that = this;
 
-			oModel.read(sPath, {
-				success: function(oData) {
-					var result = oData.results && oData.results[0];
-					if (result && result.login_status === "Y") {
-						oMsgStrip.setVisible(true);
-						oMsgStrip.setText("Login successful!");
-						oMsgStrip.setType("Success");
-
-						var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
-						oRouter.navTo("View2");
-					} else {
-						oMsgStrip.setVisible(true);
-						oMsgStrip.setText("Invalid username or password.");
+			oModel.metadataLoaded().then(function() {
+				oModel.read(sPath, {
+					success: function(oData) {
+						var result = oData.results && oData.results[0];
+						if (result && result.login_status === "Y") {
+							oMsgStrip.setText("Login successful!");
+							oMsgStrip.setType("Success");
+							oMsgStrip.setVisible(true);
+							sap.ui.core.UIComponent.getRouterFor(that).navTo("View2");
+						} else {
+							oMsgStrip.setText("Invalid username or password.");
+							oMsgStrip.setType("Error");
+							oMsgStrip.setVisible(true);
+						}
+					},
+					error: function() {
+						oMsgStrip.setText("Server error during login. Please try again.");
 						oMsgStrip.setType("Error");
+						oMsgStrip.setVisible(true);
 					}
-				},
-				error: function() {
-					oMsgStrip.setVisible(true);
-					oMsgStrip.setText("Server error during login. Please try again.");
-					oMsgStrip.setType("Error");
-					oStatusText.setText("Login failed.");
-				}
+				});
 			});
-
 		}
 	});
 });
