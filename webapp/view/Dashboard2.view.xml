@@ -1,0 +1,92 @@
+<mvc:View controllerName="EHSMPortal.controller.Dashboard2" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:layout="sap.ui.layout"
+	xmlns:viz="sap.viz.ui5.controls" xmlns:chart="sap.viz.ui5.controls.common.feeds" xmlns:suite="sap.suite.ui.commons" xmlns:core="sap.ui.core">
+	<Page>
+		<customHeader>
+			<Bar>
+				<contentLeft>
+					<Button icon="sap-icon://nav-back" text="Back" press="onNavigateToView2"/>
+				</contentLeft>
+				<contentMiddle>
+					<Title text="Incidents Dashboard"/>
+				</contentMiddle>
+				<contentRight>
+					<Button icon="sap-icon://log" text="Logout" press="onLogout"/>
+				</contentRight>
+			</Bar>
+		</customHeader>
+		<content>
+			<!-- KPI Cards -->
+			<layout:Grid defaultSpan="L3 M3 S12" class="sapUiMediumMarginTop">
+				<VBox class="cardPanel" alignItems="Center">
+					<core:Icon src="sap-icon://incident" size="2rem" color="#0a6ed1"/>
+					<Title text="Total Incidents"/>
+					<ObjectNumber number="{lot>/total}" unit="Incidents"/>
+				</VBox>
+				<VBox class="cardPanel" alignItems="Center">
+					<core:Icon src="sap-icon://message-information" size="2rem" color="#2b7c2b"/>
+					<Title text="New"/>
+					<ObjectNumber number="{lot>/new}" unit="New" state="Information"/>
+				</VBox>
+				<VBox class="cardPanel" alignItems="Center">
+					<core:Icon src="sap-icon://complete" size="2rem" color="#107e3e"/>
+					<Title text="Reviewed"/>
+					<ObjectNumber number="{lot>/reviewed}" unit="Reviewed" state="Success"/>
+				</VBox>
+				<VBox class="cardPanel" alignItems="Center">
+					<core:Icon src="sap-icon://cancel" size="2rem" color="#bb0000"/>
+					<Title text="Voided"/>
+					<ObjectNumber number="{lot>/voided}" unit="Voided" state="Error"/>
+				</VBox>
+			</layout:Grid>
+			<suite:ChartContainer id="chartContainer" title="Incidents Details" showZoom="true" autoAdjustHeight="true" class="sapUiMediumMarginTop">
+				<suite:content>
+					<suite:ChartContainerContent icon="sap-icon://table-view" title="Incident Table">
+						<suite:content>
+							<VBox>
+								<Toolbar>
+									<Button icon="sap-icon://nav-back" press="onPrevPage"/>
+									<Text text="{= 'Page ' + ${lot>/currentPage} + ' of ' + ${lot>/totalPages}}"/>
+									<Button icon="sap-icon://navigation-right-arrow" press="onNextPage"/>
+								</Toolbar>
+								<Table id="incidentTable" items="{lot>/pagedResults}">
+									<columns>
+										<Column><Text text="Incident ID"/></Column>
+										<Column><Text text="Title"/></Column>
+										<Column><Text text="Created On"/></Column>
+										<Column><Text text="Status"/></Column>
+										<Column><Text text="Category"/></Column>
+										<Column><Text text="Group"/></Column>
+										<Column><Text text="Location"/></Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<Text text="{lot>IncidentId}"/>
+												<Text text="{lot>Title}"/>
+												<Text text="{path: 'lot>CreatedOn', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy-MM-dd' }}"/>
+												<Text text="{lot>IncidentStatus}"/>
+												<Text text="{lot>IncidentCategory}"/>
+												<Text text="{lot>IncidentGroup}"/>
+												<Text text="{lot>Location}"/>
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</VBox>
+						</suite:content>
+					</suite:ChartContainerContent>
+					<!-- Charts below -->
+					<suite:ChartContainerContent icon="sap-icon://donut-chart" title="Incident Status">
+						<suite:content><viz:VizFrame id="chart1" width="100%" height="400px"/></suite:content>
+					</suite:ChartContainerContent>
+					<suite:ChartContainerContent icon="sap-icon://bar-chart" title="Group Distribution">
+						<suite:content><viz:VizFrame id="chart2" width="100%" height="400px"/></suite:content>
+					</suite:ChartContainerContent>
+					<suite:ChartContainerContent icon="sap-icon://line-chart" title="Monthly Trend">
+						<suite:content><viz:VizFrame id="chart3" width="100%" height="400px"/></suite:content>
+					</suite:ChartContainerContent>
+				</suite:content>
+			</suite:ChartContainer>
+		</content>
+	</Page>
+</mvc:View>

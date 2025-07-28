@@ -1,0 +1,43 @@
+<mvc:View controllerName="EHSMPortal.controller.View2" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core"
+	displayBlock="true">
+	<Page>
+			<customHeader>
+			<Bar>
+				<contentMiddle>
+					<Title text="EHSM Portal - Choose Dashboard"/>
+				</contentMiddle>
+				<contentRight>
+					<Button icon="sap-icon://log" text="Logout" press="onLogout"/>
+				</contentRight>
+			</Bar>
+		</customHeader>
+		<content>
+			<VBox class="sapUiSmallMargin">
+				<HBox justifyContent="Center" wrap="Wrap">
+					<VBox class="sapUiSmallMargin" width="200px">
+						<GenericTile header="Risk Assessment" subheader="EHSM Portal" press="onRiskAssessmentPress">
+							<tileContent>
+								<TileContent>
+									<content>
+										<ImageContent src="sap-icon://shield" description="Risk Assessment"/>
+									</content>
+								</TileContent>
+							</tileContent>
+						</GenericTile>
+					</VBox>
+					<VBox class="sapUiSmallMargin" width="200px">
+						<GenericTile header="Inspection Dashboard" subheader="EHSM Portal" press="onInspectionPress">
+							<tileContent>
+								<TileContent>
+									<content>
+										<ImageContent src="sap-icon://inspection" description="Inspection Dashboard"/>
+									</content>
+								</TileContent>
+							</tileContent>
+						</GenericTile>
+					</VBox>
+				</HBox>
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

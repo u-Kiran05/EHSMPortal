@@ -1,0 +1,3 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="EHSMPortal.controller.App" displayBlock="true">
+	<App id="app"/>
+</mvc:View>

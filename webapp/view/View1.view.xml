@@ -1,0 +1,19 @@
+<mvc:View controllerName="EHSMPortal.controller.View1" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" displayBlock="true">
+	<Page showHeader="false" class="ehsmLoginPage">
+		<content>
+			<VBox class="loginContainer">
+				<VBox class="loginCard">
+					<HBox justifyContent="Center" alignItems="Center" class="logoBox">
+						<Title text="EHSM Portal" level="H1" class="logoText"/>
+					</HBox>
+					<MessageStrip id="msgStrip" visible="false" type="Information" showIcon="true" showCloseButton="false" text=""/>
+					<Input id="username" class="loginInput" placeholder="User"/>
+					<Input id="password" type="Password" class="loginInput" placeholder="Password" width="100%"/>
+					<HBox justifyContent="Center">
+						<Button text="Log On" press="onLoginPress" class="loginButton"/>
+					</HBox>
+				</VBox>
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

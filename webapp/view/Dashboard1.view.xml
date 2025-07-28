@@ -1,0 +1,88 @@
+<mvc:View controllerName="EHSMPortal.controller.Dashboard1" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:layout="sap.ui.layout"
+	xmlns:viz="sap.viz.ui5.controls" xmlns:chart="sap.viz.ui5.controls.common.feeds" xmlns:suite="sap.suite.ui.commons" xmlns:core="sap.ui.core">
+	<Page class="noscroll">
+		<customHeader>
+			<Bar>
+				<contentLeft>
+					<Button icon="sap-icon://nav-back" text="Back" press="onNavigateToView2"/>
+				</contentLeft>
+				<contentMiddle>
+					<Title text="Risk Assessment "/>
+				</contentMiddle>
+				<contentRight>
+					<Button icon="sap-icon://log" text="Logout" press="onLogout"/>
+				</contentRight>
+			</Bar>
+		</customHeader>
+		<content>
+			<!-- KPI Cards -->
+			<layout:Grid defaultSpan="L4 M6 S12" class="sapUiMediumMarginTop">
+				<VBox class="cardPanel" alignItems="Center">
+					<core:Icon src="sap-icon://business-objects-experience" size="2rem" color="#0a6ed1"/>
+					<Title text="Total Assessments"/>
+					<ObjectNumber number="{risk>/total}" unit="Records"/>
+				</VBox>
+				<VBox class="cardPanel" alignItems="Center">
+					<core:Icon src="sap-icon://group" size="2rem" color="#2b7c2b"/>
+					<Title text="Unique Team Members"/>
+					<ObjectNumber number="{risk>/members}" unit="People" state="Success"/>
+				</VBox>
+				<VBox class="cardPanel" alignItems="Center">
+					<core:Icon src="sap-icon://role" size="2rem" color="#b61054"/>
+					<Title text="Unique Roles"/>
+					<ObjectNumber number="{risk>/roles}" unit="Roles" state="Information"/>
+				</VBox>
+			</layout:Grid>
+
+			<suite:ChartContainer id="chartContainer" showZoom="true" title="Risk Assessment Details" autoAdjustHeight="true"
+				selectedContent="tableContent" class="sapUiMediumMarginTop">
+				<suite:content>
+
+					<suite:ChartContainerContent id="tableContent" icon="sap-icon://table-view" title="Table View">
+						<suite:content>
+							<VBox >
+								<Toolbar>
+									<Button icon="sap-icon://nav-back" tooltip="Previous" press="onPrevPage"/>
+									<Text text="{= 'Page ' + ${risk>/currentPage} + ' of ' + ${risk>/totalPages}}"/>
+									<Button icon="sap-icon://navigation-right-arrow" tooltip="Next" press="onNextPage"/>
+								</Toolbar>
+								<Table id="chartTable" items="{risk>/pagedResults}">
+									<columns>
+										<Column><Text text="Team Member"/></Column>
+										<Column><Text text="Role"/></Column>
+										<Column><Text text="Regulation"/></Column>
+										<Column><Text text="Risk Key Ref"/></Column>
+										<Column><Text text="Created On"/></Column>
+									</columns>
+									<items>
+										<ColumnListItem>
+											<cells>
+												<Text text="{risk>AsmtTeamMember}"/>
+												<Text text="{risk>Role}"/>
+												<Text text="{risk>Regulation}"/>
+												<Text text="{risk>RiskKeyRef}"/>
+												<Text text="{path: 'risk>CreatedOnAt', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'yyyy-MM-dd' }}"/>
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</VBox>
+						</suite:content>
+					</suite:ChartContainerContent>
+					<!-- Bar Chart View -->
+					<suite:ChartContainerContent icon="sap-icon://bar-chart" title="Bar Chart">
+						<suite:content>
+							<viz:VizFrame id="barChart" width="100%" height="400px"/>
+						</suite:content>
+					</suite:ChartContainerContent>
+					<!-- Line Chart View -->
+					<suite:ChartContainerContent icon="sap-icon://line-chart" title="Line Chart">
+						<suite:content>
+							<viz:VizFrame id="lineChart" width="100%" height="400px"/>
+						</suite:content>
+					</suite:ChartContainerContent>
+				</suite:content>
+			</suite:ChartContainer>
+		</content>
+	</Page>
+</mvc:View>
