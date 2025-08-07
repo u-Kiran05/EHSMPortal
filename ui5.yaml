@@ -12,7 +12,7 @@ server:
           - path: /sap
             url: http://azktlds5cp.kcloud.com:8000
             client: "100"
-            destination: ZDEST_PORTAL
+            destination: ZEHSM_ODATA_DEST
         ui5:
           path:
             - /resources
